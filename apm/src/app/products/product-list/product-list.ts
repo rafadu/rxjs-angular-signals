@@ -3,7 +3,7 @@ import { Component, inject } from '@angular/core';
 import { ProductDetail } from '../product-detail/product-detail';
 import { Product } from '../product';
 import { ProductService } from '../product.service';
-import { Observable, Subscription, tap } from 'rxjs';
+import { catchError, EMPTY, Observable, of, Subscription, tap } from 'rxjs';
 
 @Component({
   selector: 'pm-product-list',
@@ -15,14 +15,22 @@ import { Observable, Subscription, tap } from 'rxjs';
 export class ProductList {
   pageTitle = 'Products';
   errorMessage = '';
+
   private produtctService = inject(ProductService);
+
   selectedProductId: number = 0;
+
   products$: Observable<Product[]> = this.produtctService.getProducts()
     .pipe(
-      tap(() => console.log('In component pipeline'))
+      tap(() => console.log('In component pipeline')),
+      catchError(err => {
+        this.errorMessage = err;
+        return of([]);
+        //return EMPTY;
+      })
     );
   
-    products: Product[] = [];
+  products: Product[] = [];
 
 
   sub!: Subscription;
@@ -39,7 +47,13 @@ export class ProductList {
   //   .pipe(
   //     tap(() => console.log('In component pipeline'))
   //   )
-  //   .subscribe(products => this.products = products);
+  //   .subscribe({
+  //     next: products => { 
+  //       this.products = products;
+  //       console.log(this.products);
+  //     },
+  //     error: err => this.errorMessage = err
+  //   });
   // }
 
 

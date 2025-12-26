@@ -1,7 +1,7 @@
 import { AsyncPipe, CurrencyPipe, NgFor, NgIf } from '@angular/common';
 import { Component, inject, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { Product } from '../product';
-import { Observable } from 'rxjs';
+import { catchError, Observable, of, tap } from 'rxjs';
 import { ProductService } from '../product.service';
 
 @Component({
@@ -17,7 +17,7 @@ export class ProductDetail implements OnChanges{
   errorMessage = '';
   //sub! : Subscription;
   product: Product | null = null;
-  product$ : Observable<Product> | null = null;
+  product$ : Observable<Product | null> | null = null;
   pageTitle: string = 'Product Detail';
 
   private productService = inject(ProductService);
@@ -32,8 +32,16 @@ export class ProductDetail implements OnChanges{
     if(id){
       //this.sub = this.productService.getProduct(id).subscribe(product => this.product = product);
       
-      this.product$ =  this.productService.getProduct(id);
-      this.product$.subscribe(product => this.pageTitle = `Product Detail for: ${product.productName}`);
+      this.product$ =  this.productService.getProduct(id)
+        .pipe(
+          tap(product => {
+            this.pageTitle = `Product Detail for: ${product.productName}`;
+          }),
+          catchError( err => {
+            this.errorMessage = err;
+            return of(null);
+          })
+        );
     }
   }
   
