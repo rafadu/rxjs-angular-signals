@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { CartService } from './cart/cart.service';
 
 @Component({
   selector: 'pm-root',
@@ -9,6 +10,8 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
   styleUrl: './app.css'
 })
 export class App {
+  private cartService = inject(CartService);
+
   pageTitle = 'Acme Product Management';
-  cartCount = 0;
+  cartCount = this.cartService.cartCount;
 }

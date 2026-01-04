@@ -1,8 +1,9 @@
 import { AsyncPipe, CurrencyPipe, NgFor, NgIf } from '@angular/common';
-import { Component, inject, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { Product } from '../product';
-import { catchError, Observable, of, tap } from 'rxjs';
+import { catchError, Observable, of} from 'rxjs';
 import { ProductService } from '../product.service';
+import { CartService } from '../../cart/cart.service';
 
 @Component({
   selector: 'pm-product-detail',
@@ -11,41 +12,23 @@ import { ProductService } from '../product.service';
   styleUrl: './product-detail.css',
   standalone: true,
 })
-export class ProductDetail implements OnChanges{
-  
-  @Input() productId: number = 0;
+export class ProductDetail{
+   @Input() productId: number = 0;
   errorMessage = '';
-  //sub! : Subscription;
-  product: Product | null = null;
-  product$ : Observable<Product | null> | null = null;
-  pageTitle: string = 'Product Detail';
 
   private productService = inject(ProductService);
-
-  // ngOnDestroy(): void {
-  //   if(this.sub){
-  //     this.sub.unsubscribe();
-  //   }
-  // }
-  ngOnChanges(changes: SimpleChanges): void {
-    const id = changes['productId'].currentValue;
-    if(id){
-      //this.sub = this.productService.getProduct(id).subscribe(product => this.product = product);
-      
-      this.product$ =  this.productService.getProduct(id)
-        .pipe(
-          tap(product => {
-            this.pageTitle = `Product Detail for: ${product.productName}`;
-          }),
-          catchError( err => {
-            this.errorMessage = err;
-            return of(null);
-          })
-        );
-    }
-  }
+  private cartService = inject(CartService);
+  
+  product$ = this.productService.product$
+      .pipe(
+        catchError(err => {
+          this.errorMessage = err;
+          return of(null);
+        })
+      );
+  pageTitle: string = 'Product Detail';
   
   addToCart(product: Product){
-
+    this.cartService.addToCart(product);
   }
 }

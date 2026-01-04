@@ -3,7 +3,7 @@ import { Component, inject } from '@angular/core';
 import { ProductDetail } from '../product-detail/product-detail';
 import { Product } from '../product';
 import { ProductService } from '../product.service';
-import { catchError, EMPTY, Observable, of, Subscription, tap } from 'rxjs';
+import { catchError, map, Observable, of, Subscription } from 'rxjs';
 
 @Component({
   selector: 'pm-product-list',
@@ -16,45 +16,24 @@ export class ProductList {
   pageTitle = 'Products';
   errorMessage = '';
 
-  private produtctService = inject(ProductService);
+  private productService = inject(ProductService);
 
-  selectedProductId: number = 0;
+  //boa pratica vincular de um template para um componente
+  //não de um template para um serviço
+  readonly selectedProductId$ = this.productService.productSelected$; 
 
-  products$: Observable<Product[]> = this.produtctService.getProducts()
+  readonly products$: Observable<Product[]> = this.productService.products$
     .pipe(
-      tap(() => console.log('In component pipeline')),
+      map(products => products.filter(p => p.quantityInStock !== undefined && p.quantityInStock > 0)),
       catchError(err => {
         this.errorMessage = err;
         return of([]);
         //return EMPTY;
       })
     );
-  
-  products: Product[] = [];
-
 
   sub!: Subscription;
   onSelected(productId: number): void {
-    this.selectedProductId = productId;
+    this.productService.productSelected(productId);
   }
-
-  // ngOnDestroy(): void {
-  //   this.sub.unsubscribe();
-  // }
-
-  // ngOnInit(): void {
-  //   this.sub = this.produtctService.getProducts()
-  //   .pipe(
-  //     tap(() => console.log('In component pipeline'))
-  //   )
-  //   .subscribe({
-  //     next: products => { 
-  //       this.products = products;
-  //       console.log(this.products);
-  //     },
-  //     error: err => this.errorMessage = err
-  //   });
-  // }
-
-
 }
