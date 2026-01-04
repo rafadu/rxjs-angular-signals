@@ -6,23 +6,28 @@
         {{pageTitle}}
       </div>
       <!-- <div class='card-body' *ngIf="products.length"> -->
-        <div class="card-body"
-            *ngIf="products$ | async as products">
+        @if(products(); as products){
+          <div class="card-body">
         <div class='list-group'>
-          <button type='button'
+          @for(product of products; track product){
+            <button type='button'
                   class='list-group-item'
-                  *ngFor='let product of products'
-                  [ngClass]="{'active': product.id === (selectedProductId$ | async)}"
+                  [ngClass]="{'active': product.id === selectedProductId()}"
                   (click)='onSelected(product.id)'>
             {{ product.productName }}
           </button>
+          }
         </div>
       </div>
+        }
+        
     </div>
-    <div class="alert alert-danger"
-         *ngIf="errorMessage">
-      {{errorMessage}}
+    @if(errorMessage()){
+       <div class="alert alert-danger">
+      {{errorMessage()}}
     </div>
+    }
+   
   </div>
 
   <div class='col-md-8'>

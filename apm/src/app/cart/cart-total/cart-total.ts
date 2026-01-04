@@ -1,11 +1,11 @@
-import { CurrencyPipe, NgIf } from '@angular/common';
+import { CurrencyPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { CartService } from '../cart.service';
 
 @Component({
   standalone: true,
   selector: 'pm-cart-total',
-  imports: [NgIf, CurrencyPipe],
+  imports: [CurrencyPipe],
   templateUrl: './cart-total.html',
   styleUrl: './cart-total.css',
 })

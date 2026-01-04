@@ -1,9 +1,9 @@
 <!-- <div class="card"
      *ngIf="product"> -->
-<div class="card"
-     *ngIf="product$ | async as product;">
-  <div class="card-header">
-    {{pageTitle}}
+@if(product(); as product){
+<div  class="card">
+<div class="card-header">
+    {{pageTitle()}}
   </div>
 
   <div class="card-body">
@@ -32,39 +32,43 @@
     </div>
 
     <div class="table-responsive">
-      <table class="table mb-0"
-             *ngIf="product.reviews; else noReviews">
-        <thead>
-          <tr>
-            <th>Review</th>
-            <th>Username</th>
-            <th>Text</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let review of product.reviews">
-            <td>{{ review.title }} </td>
-            <td>{{ review.userName }}</td>
-            <td>{{ review.text }}</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <ng-template #noReviews> No reviews for this product</ng-template>
-
+      @if(product.reviews){
+        <table class="table mb-0">
+          <thead>
+                    <tr>
+                      <th>Review</th>
+                      <th>Username</th>
+                      <th>Text</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for(review of product.reviews; track review){
+                      <tr>
+                        <td>{{ review.title }} </td>
+                        <td>{{ review.userName }}</td>
+                        <td>{{ review.text }}</td>
+                      </tr>
+                    }
+                    
+                  </tbody>
+        </table>
+      }
+      @else {
+        <p>No reviews for this product</p>
+      }
     </div>
 
   </div>
 </div>
 
-<div class="card"
-     *ngIf="errorMessage">
+@if(errorMessage()){
+  <div class="card">
   <div class="card-header">
     Product Detail
   </div>
 </div>
-  <div class="alert alert-danger"
-     *ngIf="errorMessage">
-    {{errorMessage}}
-
+  <div class="alert alert-danger">
+    {{errorMessage()}}
 </div>
+  }
+}

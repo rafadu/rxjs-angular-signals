@@ -1,4 +1,4 @@
-import { CurrencyPipe, NgFor, NgIf } from '@angular/common';
+import { CurrencyPipe } from '@angular/common';
 import { Component, computed, inject, Input, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CartItem } from '../cart';
@@ -6,7 +6,7 @@ import { CartService } from '../cart.service';
 
 @Component({
   selector: 'pm-cart-item',
-  imports: [CurrencyPipe,FormsModule,NgFor,NgIf],
+  imports: [CurrencyPipe,FormsModule],
   templateUrl: './cart-item.html',
   styleUrl: './cart-item.css',
 })

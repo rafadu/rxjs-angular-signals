@@ -4,7 +4,30 @@
   </div>
 
   <div class="card-body">
-    <div *ngIf="cartItems().length; else noItems">
+    @if(cartItems().length){
+      <div>
+        <div class="row">
+        <div class="col-md-4 fw-bold ">Product</div>
+        <div class="col-md-2 fw-bold text-center">Price</div>
+        <div class="col-md-2 fw-bold text-center">Quantity</div>
+        <div class="col-md-2 fw-bold text-center">Extended Price</div>
+      </div>
+
+      <!-- Display the cart items -->
+      <!-- <div *ngFor="let item of cartItems()">
+        <pm-cart-item [cartItem]='item' />
+      </div> -->
+      @for(item of cartItems(); track item){
+        <div>
+           <pm-cart-item [cartItem]='item' />
+        </div>
+      }
+      </div>
+    }
+    @else{
+      <p>No items in cart</p>
+    }
+    <!-- <div *ngIf="cartItems().length; else noItems">
       <div class="row">
         <div class="col-md-4 fw-bold ">Product</div>
         <div class="col-md-2 fw-bold text-center">Price</div>
@@ -13,11 +36,16 @@
       </div>
 
       <!-- Display the cart items -->
-      <div *ngFor="let item of cartItems()">
+      <!-- <div *ngFor="let item of cartItems()">
         <pm-cart-item [cartItem]='item' />
-      </div>
-    </div>
+      </div> ->
+      @for(item of cartItems(); track item){
+        <div>
+           <pm-cart-item [cartItem]='item' />
+        </div>
+      }
+    </div> -->
   </div>
 
-  <ng-template #noItems> No items in cart </ng-template>
+  <!-- <ng-template #noItems> No items in cart </ng-template> -->
 </div>

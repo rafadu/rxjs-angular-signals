@@ -1,5 +1,5 @@
-<div *ngIf='item() as cartItem'>
-
+@if(item(); as cartItem){
+<div>
   <div class="row mb-2">
     <div class="col-md-4">
       {{ cartItem.product.productName }}
@@ -15,7 +15,10 @@
               (ngModelChange)="onQuantitySelected($event)">
         <option disabled
                 value="">--Select a quantity--</option>
-        <option *ngFor="let q of qtyArr2()">{{ q }}</option>
+        <!-- <option *ngFor="let q of qtyArr2()">{{ q }}</option> -->
+         @for(q of qtyArr2(); track q){
+          <option>{{ q }}</option>
+         }
       </select>
     </div>
     <div class="col-md-2 text-center">
@@ -30,3 +33,9 @@
   </div>
 
 </div>
+}
+
+<!-- <div *ngIf='item() as cartItem'>
+
+  
+</div> -->

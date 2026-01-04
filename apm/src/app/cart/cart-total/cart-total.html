@@ -1,5 +1,5 @@
-<div class="card border-secondary"
-     *ngIf='cartItems().length'>
+@if(cartItems().length){
+<div class="card border-secondary">
 
   <div class='card-header text-secondary fw-bold'>
     Cart Total
@@ -12,11 +12,14 @@
     </div>
     <div class="row">
       <div class="col-md-5">Delivery:</div>
-      <div class="col-md-4 text-end"
-           *ngIf='deliveryFee'>{{deliveryFee() | currency}}</div>
-      <div class="col-md-4"
-           style='text-align:right;color:red'
-           *ngIf='!(deliveryFee())'>Free</div>
+      @if(deliveryFee()){
+        <div class="col-md-4 text-end">{{deliveryFee() | currency}}</div>
+      }
+      @else{
+         <div class="col-md-4"
+           style='text-align:right;color:red'>Free</div>
+      }
+      
     </div>
 
     <div class="row">
@@ -30,3 +33,6 @@
     </div>
   </div>
 </div>
+
+}
+
